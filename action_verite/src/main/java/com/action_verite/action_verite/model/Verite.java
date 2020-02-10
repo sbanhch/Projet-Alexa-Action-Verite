@@ -1,12 +1,12 @@
-package model;
+package com.action_verite.action_verite.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Action", uniqueConstraints = {@UniqueConstraint(columnNames = "action")})
-public class Action {
+@Table(name = "Verite", uniqueConstraints = {@UniqueConstraint(columnNames = "verite")})
+public class Verite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,17 +14,17 @@ public class Action {
     @Column(name = "user_id")
     private Integer id;
 
-    private String action;
+    private String verite;
 
     private Integer Level;
 
     private Boolean isActive;
 
-    public Action() {
+    public Verite() {
     }
 
-    public Action(String action, Integer level, Boolean isActive) {
-        this.action = action;
+    public Verite(String verite, Integer level, Boolean isActive) {
+        this.verite = verite;
         Level = level;
         this.isActive = isActive;
     }
@@ -37,12 +37,12 @@ public class Action {
         this.id = id;
     }
 
-    public String getAction() {
-        return action;
+    public String getVerite() {
+        return verite;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setVerite(String verite) {
+        this.verite = verite;
     }
 
     public Integer getLevel() {
@@ -63,9 +63,9 @@ public class Action {
 
     @Override
     public String toString() {
-        return "Action{" +
+        return "Verite{" +
                 "id=" + id +
-                ", action='" + action + '\'' +
+                ", verite='" + verite + '\'' +
                 ", Level=" + Level +
                 ", isActive=" + isActive +
                 '}';
