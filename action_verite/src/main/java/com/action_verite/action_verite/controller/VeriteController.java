@@ -15,7 +15,7 @@ import com.action_verite.action_verite.repository.VeriteRepository;
 public class VeriteController {
 
 	@Autowired
-	private  VeriteRepository bdAction;
+	private  VeriteRepository bdVerite;
 	
 	
 	@RequestMapping("/verite")
