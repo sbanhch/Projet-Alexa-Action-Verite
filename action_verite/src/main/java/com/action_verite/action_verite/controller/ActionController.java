@@ -1,5 +1,6 @@
 package com.action_verite.action_verite.controller;
 
+import com.action_verite.action_verite.exceptions.ActionNotFoundException;
 import com.action_verite.action_verite.model.Action;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,14 +39,18 @@ public class ActionController {
 	}
 
 	/***
-	 * Retourne une action selectionner parmis la liste d'action
+	 * Retourne une action selectionnee parmis la liste d'action
 	 * @return une action
 	 */
-	@ApiOperation(value = "Retourne la liste d'une action", response = List.class)
+	@ApiOperation(value = "Retourne une action", response = List.class)
 	@GetMapping("/action")
 	@ResponseBody
 	public ResponseEntity<List<Action>> getAction() {
 
-		return new ResponseEntity<>(this.actionRepository.randomAction(), HttpStatus.OK);
+		List<Action> actions = actionRepository.getRandomAction();
+
+		if(actions.size() == 0)  throw new ActionNotFoundException("Il n'y a plus d'actions disponible");
+
+		return new ResponseEntity<List<Action>>(actions, HttpStatus.OK);
 	}
 }

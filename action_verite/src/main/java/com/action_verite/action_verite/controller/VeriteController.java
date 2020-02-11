@@ -1,5 +1,6 @@
 package com.action_verite.action_verite.controller;
 
+import com.action_verite.action_verite.exceptions.VeriteNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,21 @@ public class VeriteController {
 	@ResponseBody
 	public ResponseEntity<List<Verite>> getAllVerite() {
 		return new ResponseEntity<>(this.veriteRepository.findAll(), HttpStatus.OK);
+	}
+
+	/***
+	 * Retourne une verite selectionnee parmis la liste des verites
+	 * @return une verite
+	 */
+	@ApiOperation(value = "Retourne une verite", response = List.class)
+	@GetMapping("/verite")
+	@ResponseBody
+	public ResponseEntity<List<Verite>> getVerite() {
+
+		List<Verite> verites = veriteRepository.getRandomVerite();
+
+		if(verites.size() == 0)  throw new VeriteNotFoundException("Il n'y a plus de verite disponible");
+
+		return new ResponseEntity<List<Verite>>(verites, HttpStatus.OK);
 	}
 }

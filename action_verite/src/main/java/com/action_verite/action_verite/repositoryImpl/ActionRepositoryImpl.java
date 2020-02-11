@@ -4,6 +4,8 @@ import com.action_verite.action_verite.model.Action;
 import com.action_verite.action_verite.repository.ActionRepository;
 import com.action_verite.action_verite.repository.ActionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -13,6 +15,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Random;
 
+@Transactional
 public class ActionRepositoryImpl implements ActionRepositoryCustom {
 
     @PersistenceContext
@@ -27,6 +30,15 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
 
             List<Action> actions = actionRepository.randomAction();
 
+            for (Action action : actions) {
+
+                System.out.println(action);
+                action = actionRepository.findById(action.getId());
+                Integer id = action.getId();
+                updateAction(id);
+            }
+
+            return actions;
 
         } catch (NoResultException e) {
 
@@ -44,9 +56,18 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
         selectQuery.setFirstResult(number);
         selectQuery.setMaxResults(1);
         return (Action) selectQuery.getSingleResult();*/
+    }
 
+    public void updateAction(Integer id) {
+        Action action = new Action();
 
-        return null;
+        action = actionRepository.findById(id);
+
+        action.setActive(false);
+
+        this.entityManager.persist(action);
+
+        this.entityManager.flush();
     }
 
 }
