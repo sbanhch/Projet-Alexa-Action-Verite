@@ -2,12 +2,15 @@ package com.action_verite.action_verite.controller;
 
 import com.action_verite.action_verite.exceptions.ActionNotFoundException;
 import com.action_verite.action_verite.model.Action;
+import com.action_verite.action_verite.model.Verite;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,5 +70,17 @@ public class ActionController {
 		return new ResponseEntity<>(this.actionRepository.resetActions(), HttpStatus.OK);
 	}
 	
+	/**
+	 * Retourne la liste des actions correspondant au niveau demandé
+	 * @param level
+	 * @return liste des actions de niveau "level" (entre 1 et 3)
+	 */
+	@ApiOperation(value = "Retourne la liste des actions correspondant au niveau demandé", response = List.class)
+	@GetMapping("/action/level/{level}")
+	@ResponseBody
+	public List<Action> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
+		return actionRepository.findByLevel(level);
+
+	}
 	
 }

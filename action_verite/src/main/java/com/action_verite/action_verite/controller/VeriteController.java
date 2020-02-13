@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,4 +66,17 @@ public class VeriteController {
 
 		return new ResponseEntity<>(this.veriteRepository.resetVerites(), HttpStatus.OK);
 	}
+	
+	/**
+	 * Retourne la liste des vérités correspondant au niveau demandé
+	 * @param level
+	 * @return La liste des vérités de niveau "level" (entre 1 et 3)
+	 */
+	@ApiOperation(value = "Retourne la liste des verite correspondant au niveau demandé", response = List.class)
+	@GetMapping("/verite/level/{level}")
+	@ResponseBody
+	public List<Verite> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
+		return veriteRepository.findByLevel(level);
+    }
+	
 }

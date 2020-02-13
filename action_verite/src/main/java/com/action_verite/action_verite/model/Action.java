@@ -15,7 +15,7 @@ public class Action {
 
     private String action;
 
-    private Integer Level;
+    private Integer level;
 
     private Boolean isActive;
 
@@ -24,7 +24,7 @@ public class Action {
 
     public Action(String action, Integer level, Boolean isActive) {
         this.action = action;
-        Level = level;
+        level = level;
         this.isActive = isActive;
     }
 
@@ -45,12 +45,12 @@ public class Action {
         this.action = action;
     }
 
-    public Integer getLevel() {
-        return Level;
+    public Integer getlevel() {
+        return level;
     }
 
-    public void setLevel(Integer level) {
-        Level = level;
+    public void setlevel(Integer level) {
+        level = level;
     }
 
     @JsonIgnore
@@ -67,7 +67,7 @@ public class Action {
         return "Action{" +
                 "id=" + id +
                 ", action='" + action + '\'' +
-                ", Level=" + Level +
+                ", level=" + level +
                 ", isActive=" + isActive +
                 '}';
     }
