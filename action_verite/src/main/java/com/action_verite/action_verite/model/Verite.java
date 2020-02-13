@@ -10,7 +10,6 @@ public class Verite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "user_id")
     private Integer id;
 
@@ -18,7 +17,6 @@ public class Verite {
 
     private Integer Level;
 
-    @JsonIgnore
     private Boolean isActive;
 
     public Verite() {
@@ -30,6 +28,7 @@ public class Verite {
         this.isActive = isActive;
     }
 
+    @JsonIgnore
     public Integer getId() {
         return id;
     }
@@ -54,6 +53,7 @@ public class Verite {
         Level = level;
     }
 
+    @JsonIgnore
     public Boolean getActive() {
         return isActive;
     }
