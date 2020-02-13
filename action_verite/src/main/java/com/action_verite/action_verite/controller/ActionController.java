@@ -53,4 +53,16 @@ public class ActionController {
 
 		return new ResponseEntity<List<Action>>(actions, HttpStatus.OK);
 	}
+
+	/***
+	 * Reset toutes les actions
+	 * @return la liste des actions
+	 */
+	@ApiOperation(value = "Reset et retourne la liste de toutes les actions", response = List.class)
+	@GetMapping("/action/reset")
+	@ResponseBody
+	public ResponseEntity<List<Action>> resetActions() {
+
+		return new ResponseEntity<>(this.actionRepository.resetActions(), HttpStatus.OK);
+	}
 }

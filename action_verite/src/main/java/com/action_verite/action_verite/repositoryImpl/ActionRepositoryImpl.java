@@ -58,12 +58,45 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
         return (Action) selectQuery.getSingleResult();*/
     }
 
+    public List<Action> resetActions(){
+        try {
+
+            List<Action> actions = actionRepository.findAll();
+
+            for (Action action : actions) {
+
+                System.out.println(action);
+                action = actionRepository.findById(action.getId());
+                Integer id = action.getId();
+                resetAction(id);
+            }
+
+            return actions;
+
+        } catch (NoResultException e) {
+
+            return null;
+        }
+    }
+
     public void updateAction(Integer id) {
         Action action = new Action();
 
         action = actionRepository.findById(id);
 
         action.setActive(false);
+
+        this.entityManager.persist(action);
+
+        this.entityManager.flush();
+    }
+
+    public void resetAction(Integer id) {
+        Action action = new Action();
+
+        action = actionRepository.findById(id);
+
+        action.setActive(true);
 
         this.entityManager.persist(action);
 

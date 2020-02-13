@@ -7,4 +7,8 @@ import java.util.List;
 public interface ActionRepositoryCustom {
 
     public List<Action> getRandomAction();
+
+    public List<Action> resetActions();
+
+
 }
