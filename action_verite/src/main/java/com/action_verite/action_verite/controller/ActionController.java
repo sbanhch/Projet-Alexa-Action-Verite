@@ -42,16 +42,14 @@ public class ActionController {
 	 * Retourne une action selectionnee parmis la liste d'action
 	 * @return une action
 	 */
-	@ApiOperation(value = "Retourne une action", response = List.class)
+	@ApiOperation(value = "Retourne une action", response = Action.class)
 	@GetMapping("/action")
 	@ResponseBody
-	public ResponseEntity<List<Action>> getAction() {
+	public ResponseEntity<Action> getAction() {
 
-		List<Action> actions = actionRepository.getRandomAction();
+		Action actions = actionRepository.getRandomAction();
 
-		if(actions.size() == 0)  throw new ActionNotFoundException("Il n'y a plus d'actions disponible");
-
-		return new ResponseEntity<List<Action>>(actions, HttpStatus.OK);
+		return new ResponseEntity<Action>(actions, HttpStatus.OK);
 	}
 
 	/***

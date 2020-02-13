@@ -25,7 +25,7 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
     private ActionRepository actionRepository;
 
 
-    public List<Action> getRandomAction(){
+    public Action getRandomAction(){
         try {
 
             List<Action> actions = actionRepository.randomAction();
@@ -33,12 +33,13 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
             for (Action action : actions) {
 
                 System.out.println(action);
+
                 action = actionRepository.findById(action.getId());
                 Integer id = action.getId();
                 updateAction(id);
             }
 
-            return actions;
+            return actions.get(0);
 
         } catch (NoResultException e) {
 

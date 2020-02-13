@@ -18,6 +18,7 @@ public class Action {
 
     private Integer Level;
 
+    @JsonIgnore
     private Boolean isActive;
 
     public Action() {

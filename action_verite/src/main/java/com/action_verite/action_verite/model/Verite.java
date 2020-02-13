@@ -18,6 +18,7 @@ public class Verite {
 
     private Integer Level;
 
+    @JsonIgnore
     private Boolean isActive;
 
     public Verite() {
