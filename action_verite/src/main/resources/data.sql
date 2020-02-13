@@ -12,8 +12,13 @@ INSERT INTO Action VALUES(11, 3, 'Boire un shot d’alcool', true);
 
 INSERT INTO Action VALUES(12, 3, 'Melange ton verre d’alcool avec celui des autres joueurs', true);
 INSERT INTO Action VALUES(13, 3, 'Enlève tes vêtements et sort dans la rue', true);
-
-
+INSERT INTO Action VALUES(14, 2, 'Laissez vos yeux se connecter et reconnaître un autre joueur à son odeur.', true);
+INSERT INTO Action VALUES(15, 3, 'Enlevez toutes les chaussettes et tout ce qui se trouve dans votre pantalon et / ou votre soutien-gorge.', true);
+INSERT INTO Action VALUES(16, 2 , 'Echangez le t-shirt avec la personne à droite / à gauche de vous.', true);
+INSERT INTO Action VALUES(17, 3, 'lèche le sol.', true);
+INSERT INTO Action VALUES(18, 1, 'Nourrissez la personne à côté de vous avec quelque chose de savoureux.', true);
+INSERT INTO Action VALUES(19, 1, 'Fais sentir tes chaussures à la personne de ton choix', true);
+INSERT INTO Action VALUES(20, 1, 'Décrivez votre pire professeur actuel.', true);
 
 INSERT INTO Verite VALUES(1, 1, true, 'Aimes tu mandiau ?');
 INSERT INTO Verite VALUES(2, 1, true, 'Quelle est ta pire honte ?');
