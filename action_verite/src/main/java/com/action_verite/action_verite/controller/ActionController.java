@@ -47,9 +47,11 @@ public class ActionController {
 	@ResponseBody
 	public ResponseEntity<Action> getAction() {
 
-		Action actions = actionRepository.getRandomAction();
+		List<Action> actions = actionRepository.randomAction();
 
-		return new ResponseEntity<Action>(actions, HttpStatus.OK);
+		if(actions.size() == 0)  throw new ActionNotFoundException("Il n'y a plus d'action disponible");
+
+		return new ResponseEntity<Action>(actionRepository.getRandomAction(), HttpStatus.OK);
 	}
 
 	/***

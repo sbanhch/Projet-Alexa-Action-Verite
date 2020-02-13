@@ -44,13 +44,13 @@ public class VeriteController {
 	@ApiOperation(value = "Retourne une verite", response = List.class)
 	@GetMapping("/verite")
 	@ResponseBody
-	public ResponseEntity<List<Verite>> getVerite() {
+	public ResponseEntity<Verite> getVerite() {
 
-		List<Verite> verites = veriteRepository.getRandomVerite();
+		List<Verite> verites = veriteRepository.randomVerite();
 
-		if(verites.size() == 0)  throw new VeriteNotFoundException("Il n'y a plus de verite disponible");
+		if(verites.size() == 0)  throw new VeriteNotFoundException("Il n'y a plus de verites disponible");
 
-		return new ResponseEntity<List<Verite>>(verites, HttpStatus.OK);
+		return new ResponseEntity<Verite>(veriteRepository.getRandomVerite(), HttpStatus.OK);
 	}
 
 	/***

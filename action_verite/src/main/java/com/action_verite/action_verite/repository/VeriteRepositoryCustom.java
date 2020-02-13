@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface VeriteRepositoryCustom {
 
-    public List<Verite> getRandomVerite();
+    public Verite getRandomVerite();
 
     public List<Verite> resetVerites();
 }

@@ -21,7 +21,7 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
     private VeriteRepository veriteRepository;
 
     @Override
-    public List<Verite> getRandomVerite() {
+    public Verite getRandomVerite() {
         try {
 
             List<Verite> verites = veriteRepository.randomVerite();
@@ -34,7 +34,7 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
                 updateVerite(id);
             }
 
-            return verites;
+            return verites.get(0);
 
         } catch (NoResultException e) {
 
