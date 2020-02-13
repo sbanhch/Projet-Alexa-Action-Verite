@@ -55,4 +55,37 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
         this.entityManager.flush();
     }
 
+    public List<Verite> resetVerites(){
+        try {
+
+            List<Verite> verites = veriteRepository.findAll();
+
+            for (Verite verite : verites) {
+
+                System.out.println(verite);
+                verite = veriteRepository.findById(verite.getId());
+                Integer id = verite.getId();
+                resetVerite(id);
+            }
+
+            return verites;
+
+        } catch (NoResultException e) {
+
+            return null;
+        }
+    }
+
+    public void resetVerite(Integer id) {
+        Verite verite = new Verite();
+
+        verite = veriteRepository.findById(id);
+
+        verite.setActive(true);
+
+        this.entityManager.persist(verite);
+
+        this.entityManager.flush();
+    }
+
 }
