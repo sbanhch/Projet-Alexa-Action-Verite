@@ -1,8 +1,0 @@
-com\action_verite\action_verite\model\Verite.class
-com\action_verite\action_verite\controller\ActionController.class
-com\action_verite\action_verite\repository\ActionRepository.class
-com\action_verite\action_verite\model\Action.class
-com\action_verite\action_verite\configuration\SwaggerConfig.class
-com\action_verite\action_verite\ActionVeriteApplication.class
-com\action_verite\action_verite\controller\VeriteController.class
-com\action_verite\action_verite\repository\VeriteRepository.class

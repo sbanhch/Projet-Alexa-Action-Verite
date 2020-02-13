@@ -41,7 +41,7 @@ public class VeriteController {
 	 * Retourne une verite selectionnee parmis la liste des verites
 	 * @return une verite
 	 */
-	@ApiOperation(value = "Retourne une verite", response = List.class)
+	@ApiOperation(value = "Retourne une verite", response = Verite.class)
 	@GetMapping("/verite")
 	@ResponseBody
 	public ResponseEntity<Verite> getVerite() {
