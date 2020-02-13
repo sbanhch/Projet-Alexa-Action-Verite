@@ -12,7 +12,22 @@ INSERT INTO Action VALUES(11, 3, 'Boire un shot d’alcool', true);
 
 INSERT INTO Action VALUES(12, 3, 'Melange ton verre d’alcool avec celui des autres joueurs', true);
 INSERT INTO Action VALUES(13, 3, 'Enlève tes vêtements et sort dans la rue', true);
-
+INSERT INTO Action VALUES(14, 2, 'Laissez vos yeux se connecter et reconnaître un autre joueur à son odeur.', true);
+INSERT INTO Action VALUES(15, 3, 'Enlevez toutes les chaussettes et tout ce qui se trouve dans votre pantalon et / ou votre soutien-gorge.', true);
+INSERT INTO Action VALUES(16, 2, 'Echangez le t-shirt avec la personne à droite / à gauche de vous.', true);
+INSERT INTO Action VALUES(17, 3, 'lèche le sol.', true);
+INSERT INTO Action VALUES(18, 1, 'Nourrissez la personne à côté de vous avec quelque chose de savoureux.', true);
+INSERT INTO Action VALUES(19, 1, 'Fais sentir tes chaussures à la personne de ton choix', true);
+INSERT INTO Action VALUES(20, 1, 'Décrivez votre pire professeur actuel.', true);
+INSERT INTO Action VALUES(21, 1, 'Imite un animal choisi par le groupe', true);
+INSERT INTO Action VALUES(22, 1, 'Téléphone à une personne au hasard et dit lui qu’elle est joli.', true);
+INSERT INTO Action VALUES(23, 1, 'Bois un verre d’eau chaude sans t’arrêter', true);
+INSERT INTO Action VALUES(24, 2, 'Chante une chanson de ton choix en ayant la bouche pleine', true);
+INSERT INTO Action VALUES(25, 2, 'Tu n’as pas le droit de prononcer les mots oui ou non pendant 4 tours', true);
+INSERT INTO Action VALUES(26, 2, 'Déshabille toi et porte tes habits à l’envers dès maintenant', true);
+INSERT INTO Action VALUES(27, 3, 'Bois 3 verres d’alcool à la suite', true);
+INSERT INTO Action VALUES(28, 3, 'Deguste un aliment sucré mélangé à un aliment salé choisi par les autres joueurs', true);
+INSERT INTO Action VALUES(29, 3, 'Fais le canard dans toute la maison', true);
 
 
 INSERT INTO Verite VALUES(1, 1, true, 'Aimes tu mandiau ?');

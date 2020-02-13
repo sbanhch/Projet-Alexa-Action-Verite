@@ -8,5 +8,5 @@ public interface VeriteRepositoryCustom {
 
     public Verite getRandomVerite();
 
-    public List<Verite> resetVerites();
+    public String resetVerites();
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,10 +60,12 @@ public class ActionController {
 	 * @return la liste des actions
 	 */
 	@ApiOperation(value = "Reset et retourne la liste de toutes les actions", response = List.class)
-	@GetMapping("/action/reset")
+	@PostMapping("/action/reset")
 	@ResponseBody
-	public ResponseEntity<List<Action>> resetActions() {
+	public ResponseEntity<String> resetActions() {
 
 		return new ResponseEntity<>(this.actionRepository.resetActions(), HttpStatus.OK);
 	}
+	
+	
 }

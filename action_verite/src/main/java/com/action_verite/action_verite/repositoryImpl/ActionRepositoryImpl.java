@@ -59,7 +59,7 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
         return (Action) selectQuery.getSingleResult();*/
     }
 
-    public List<Action> resetActions(){
+    public String resetActions(){
         try {
 
             List<Action> actions = actionRepository.findAll();
@@ -72,11 +72,11 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
                 resetAction(id);
             }
 
-            return actions;
+            return "Reset action reussi";
 
         } catch (NoResultException e) {
 
-            return null;
+            return "Erreur du reset : " + e;
         }
     }
 

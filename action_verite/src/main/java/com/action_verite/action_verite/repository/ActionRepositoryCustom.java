@@ -8,7 +8,7 @@ public interface ActionRepositoryCustom {
 
     public Action getRandomAction();
 
-    public List<Action> resetActions();
+    public String resetActions();
 
 
 }

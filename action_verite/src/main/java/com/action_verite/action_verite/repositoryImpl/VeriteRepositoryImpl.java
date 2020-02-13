@@ -55,7 +55,7 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
         this.entityManager.flush();
     }
 
-    public List<Verite> resetVerites(){
+    public String resetVerites(){
         try {
 
             List<Verite> verites = veriteRepository.findAll();
@@ -68,11 +68,11 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
                 resetVerite(id);
             }
 
-            return verites;
+            return "Reset réussi";
 
         } catch (NoResultException e) {
 
-            return null;
+            return "Erreur du reset :" + e;
         }
     }
 
