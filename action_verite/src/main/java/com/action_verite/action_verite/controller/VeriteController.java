@@ -58,14 +58,15 @@ public class VeriteController {
 
 	/***
 	 * Reset toutes les verites
-	 * @return la liste des verites
+	 * @return rien
 	 */
-	@ApiOperation(value = "Reset et retourne la liste de toutes les verites", response = List.class)
-	@PutMapping("/verite/reset")
+	@ApiOperation(value = "Reset la liste de toutes les verites")
+	@PutMapping(value = "/verite/reset")
 	@ResponseBody
-	public ResponseEntity<String> resetVerites() {
+	public void resetVerites() {
 
-		return new ResponseEntity<>(this.veriteRepository.resetVerites(), HttpStatus.OK);
+		veriteRepository.resetVerites();
+
 	}
 	
 	/**
