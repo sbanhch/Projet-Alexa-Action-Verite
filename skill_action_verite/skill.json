@@ -1,0 +1,37 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:027300229246:function:b73dd13c-97be-42d6-9b29-dcab0d0f7aea:Release_0"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "locales": {
+        "fr-FR": {}
+      }
+    },
+    "publishingInformation": {
+      "locales": {
+        "fr-FR": {
+          "name": "Action ou Vérité",
+          "summary": "Jouer à Action ou Vérité.",
+          "description": "Jouer à Action ou Vérité à plusieurs.",
+          "examplePhrases": [
+            "Alexa open action ou vérité",
+            "Alexa ouvre action ou vérité",
+            "Alexa lance action ou vérité"
+          ],
+          "keywords": []
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": []
+    }
+  }
+}

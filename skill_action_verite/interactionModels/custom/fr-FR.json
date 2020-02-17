@@ -1,0 +1,364 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "action ou vérité",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "DialogIntent",
+          "slots": [
+            {
+              "name": "joueurs",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{joueurs}",
+                "{joueurs} joueurs"
+              ]
+            },
+            {
+              "name": "manches",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{manches}",
+                "{manches} manches"
+              ]
+            }
+          ],
+          "samples": [
+            "commencer"
+          ]
+        },
+        {
+          "name": "ActionIntent",
+          "slots": [
+            {
+              "name": "actOrTruth",
+              "type": "SELFCHOICE",
+              "samples": [
+                "Je choisi {actOrTruth}",
+                "{actOrTruth}",
+                "Je veux une {actOrTruth}"
+              ]
+            }
+          ],
+          "samples": []
+        },
+        {
+          "name": "validationIntent",
+          "slots": [
+            {
+              "name": "statePlayer",
+              "type": "validation"
+            }
+          ],
+          "samples": [
+            "{statePlayer}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "id": "verite",
+              "name": {
+                "value": "verite",
+                "synonyms": [
+                  "vérité"
+                ]
+              }
+            },
+            {
+              "id": "action",
+              "name": {
+                "value": "action"
+              }
+            }
+          ],
+          "name": "SELFCHOICE"
+        },
+        {
+          "values": [
+            {
+              "id": "1",
+              "name": {
+                "value": "non",
+                "synonyms": [
+                  "no"
+                ]
+              }
+            },
+            {
+              "id": "2",
+              "name": {
+                "value": "oui",
+                "synonyms": [
+                  "yes"
+                ]
+              }
+            }
+          ],
+          "name": "validation"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "DialogIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "joueurs",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.280092056003.1483478925489",
+                "confirmation": "Confirm.Slot.686776985214.636717041629"
+              },
+              "validations": [
+                {
+                  "type": "isLessThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.889267379386.1517330903595",
+                  "value": "6"
+                },
+                {
+                  "type": "isGreaterThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.889267379386.820432956243",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "name": "manches",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.280092056003.1186574378010",
+                "confirmation": "Confirm.Slot.686776985214.923670904509"
+              },
+              "validations": [
+                {
+                  "type": "isLessThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.1114591874304.1440741376141",
+                  "value": "5"
+                },
+                {
+                  "type": "isGreaterThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.1114591874304.973071577659",
+                  "value": "2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ActionIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "actOrTruth",
+              "type": "SELFCHOICE",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.682263230644.122514007994"
+              }
+            }
+          ]
+        },
+        {
+          "name": "validationIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "statePlayer",
+              "type": "validation",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.553745152913.1210298154602"
+              }
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.395523227295.282504032206",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I need to know the number of player to go further"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.802313159773.301271101753",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "How many rounds do you want for that game"
+          },
+          {
+            "type": "PlainText",
+            "value": "I need to know the number of rounds you want to go further"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.280092056003.1483478925489",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Combien y a t-il de joueurs ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.280092056003.1483478925489",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "So you want {joueurs} players. Right ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.280092056003.1186574378010",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Combien de manches voulez vous jouer ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.280092056003.1186574378010",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "So you want {manches} rounds. Right ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.280092056003",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "{joueurs} joueurs et {manches} manches. Est-ce correct ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1425691931721",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Voulez vous vraiment {actOrTruth} ?"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.889267379386.1517330903595",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Six joueurs maximum."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.889267379386.820432956243",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Deux joueurs minimum."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.1114591874304.1440741376141",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Maximum cinq manches."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.1114591874304.973071577659",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Minimum deux manches."
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.553745152913.1210298154602",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Validez-vous la réponse ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.682263230644.122514007994",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Choisissez entre action et vérité."
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.686776985214.636717041629",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Vous voulez vraiment {joueurs} joueurs ?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Vous avez dit {joueurs} joueurs ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.686776985214.923670904509",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Vous avez dit {manches} manches ?"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "46"
+}
