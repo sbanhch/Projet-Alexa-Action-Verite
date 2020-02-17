@@ -24,7 +24,7 @@ public class Verite {
 
     public Verite(String verite, Integer level, Boolean isActive) {
         this.verite = verite;
-        level = level;
+        this.level = level;
         this.isActive = isActive;
     }
 
@@ -45,12 +45,12 @@ public class Verite {
         this.verite = verite;
     }
 
-    public Integer getlevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setlevel(Integer level) {
-        level = level;
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     @JsonIgnore

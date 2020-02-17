@@ -24,7 +24,7 @@ public class Action {
 
     public Action(String action, Integer level, Boolean isActive) {
         this.action = action;
-        level = level;
+        this.level = level;
         this.isActive = isActive;
     }
 
