@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,7 +61,7 @@ public class VeriteController {
 	 * @return la liste des verites
 	 */
 	@ApiOperation(value = "Reset et retourne la liste de toutes les verites", response = List.class)
-	@PostMapping("/verite/reset")
+	@PutMapping("/verite/reset")
 	@ResponseBody
 	public ResponseEntity<String> resetVerites() {
 

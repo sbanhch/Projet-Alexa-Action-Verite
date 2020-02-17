@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -76,7 +77,7 @@ public class ActionController {
 	 * @return liste des actions de niveau "level" (entre 1 et 3)
 	 */
 	@ApiOperation(value = "Retourne la liste des actions correspondant au niveau demandé", response = List.class)
-	@GetMapping("/action/level/{level}")
+	@PutMapping("/action/level/{level}")
 	@ResponseBody
 	public List<Action> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
 		return actionRepository.findByLevel(level);
