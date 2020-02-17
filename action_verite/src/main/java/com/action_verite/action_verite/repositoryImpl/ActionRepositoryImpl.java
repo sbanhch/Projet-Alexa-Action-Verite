@@ -59,6 +59,28 @@ public class ActionRepositoryImpl implements ActionRepositoryCustom {
         return (Action) selectQuery.getSingleResult();*/
     }
 
+    public Action getRandomActionByLevel(Integer level){
+        try {
+
+            List<Action> actions = actionRepository.randomActionByLevel(level);
+
+            for (Action action : actions) {
+
+                System.out.println(action);
+
+                action = actionRepository.findById(action.getId());
+                Integer id = action.getId();
+                updateAction(id);
+            }
+
+            return actions.get(0);
+
+        } catch (NoResultException e) {
+
+            return null;
+        }
+    }
+
     public String resetActions(){
         try {
 

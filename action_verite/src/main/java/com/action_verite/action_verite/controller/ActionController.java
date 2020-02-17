@@ -68,15 +68,20 @@ public class ActionController {
 	}
 	
 	/**
-	 * Retourne la liste des actions correspondant au niveau demandé
+	 * Retourne une action correspondant au niveau demandé
 	 * @param level
-	 * @return liste des actions de niveau "level" (entre 1 et 3)
+	 * @return une actions de niveau "level" (entre 1 et 3)
 	 */
-	@ApiOperation(value = "Retourne la liste des actions correspondant au niveau demandé", response = List.class)
+	@ApiOperation(value = "Retourne une action correspondant au niveau demandé", response = Action.class)
 	@GetMapping("/action/level/{level}")
 	@ResponseBody
-	public List<Action> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
-		return actionRepository.findByLevel(level);
+	public ResponseEntity<Action>  getVeriteByLevel(@PathVariable(value = "level") Integer level) {
+
+		List<Action> actions = actionRepository.randomActionByLevel(level);
+
+		if(actions.size() == 0)  throw new ActionNotFoundException("Il n'y a plus d'action disponible dans le niveau demande");
+
+		return new ResponseEntity<Action>(actionRepository.getRandomActionByLevel(level), HttpStatus.OK);
 
 	}
 }

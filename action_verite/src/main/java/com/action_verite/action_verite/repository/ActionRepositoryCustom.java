@@ -8,6 +8,8 @@ public interface ActionRepositoryCustom {
 
     public Action getRandomAction();
 
+    public Action getRandomActionByLevel(Integer level);
+
     public String resetActions();
 
 

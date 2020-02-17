@@ -43,6 +43,28 @@ public class VeriteRepositoryImpl implements VeriteRepositoryCustom {
 
     }
 
+    public Verite getRandomVeriteByLevel(Integer level){
+        try {
+
+            List<Verite> verites = veriteRepository.randomVeriteByLevel(level);
+
+            for (Verite verite : verites) {
+
+                System.out.println(verite);
+
+                verite = veriteRepository.findById(verite.getId());
+                Integer id = verite.getId();
+                updateVerite(id);
+            }
+
+            return verites.get(0);
+
+        } catch (NoResultException e) {
+
+            return null;
+        }
+    }
+
     public void updateVerite(Integer id) {
         Verite verite = new Verite();
 

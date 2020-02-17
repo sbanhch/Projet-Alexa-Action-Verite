@@ -12,6 +12,11 @@ public interface VeriteRepository extends JpaRepository<Verite, Long>, VeriteRep
 
     @Query(nativeQuery = true, value = "SELECT * FROM Verite v WHERE v.is_active = true ORDER BY RANDOM() LIMIT 1")
     public List<Verite> randomVerite();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM Verite v WHERE v.is_active = true AND v.level = ?1 ORDER BY RANDOM() LIMIT 1")
+    public List<Verite> randomVeriteByLevel(Integer level);
+
     public List<Verite> findByLevel(Integer level);
+
     public Verite findById(Integer id);
 }

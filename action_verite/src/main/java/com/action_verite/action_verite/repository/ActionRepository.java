@@ -14,6 +14,9 @@ public interface ActionRepository extends JpaRepository<Action, Long>, ActionRep
 
     @Query(nativeQuery = true, value = "SELECT * FROM Action s WHERE s.is_active = true ORDER BY RANDOM() LIMIT 1")
     public List<Action> randomAction();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM Action s WHERE s.is_active = true AND s.level = ?1 ORDER BY RANDOM() LIMIT 1")
+    public List<Action> randomActionByLevel(Integer level);
     
     public List<Action> findByLevel(Integer level);
     

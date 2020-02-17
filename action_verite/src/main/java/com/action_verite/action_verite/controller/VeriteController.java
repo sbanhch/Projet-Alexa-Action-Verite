@@ -70,15 +70,20 @@ public class VeriteController {
 	}
 	
 	/**
-	 * Retourne la liste des vérités correspondant au niveau demandé
+	 * Retourne une verites correspondant au niveau demande
 	 * @param level
-	 * @return La liste des vérités de niveau "level" (entre 1 et 3)
+	 * @return une verite de niveau "level" (entre 1 et 3)
 	 */
-	@ApiOperation(value = "Retourne la liste des verite correspondant au niveau demandé", response = List.class)
+	@ApiOperation(value = "Retourne une verite correspondant au niveau demandé", response = List.class)
 	@GetMapping("/verite/level/{level}")
 	@ResponseBody
-	public List<Verite> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
-		return veriteRepository.findByLevel(level);
+	public ResponseEntity<Verite> getVeriteByLevel(@PathVariable(value = "level") Integer level) {
+
+		List<Verite> verites = veriteRepository.randomVeriteByLevel(level);
+
+		if(verites.size() == 0)  throw new VeriteNotFoundException("Il n'y a plus d'action disponible dans le niveau demande");
+
+		return new ResponseEntity<Verite>(veriteRepository.getRandomVeriteByLevel(level), HttpStatus.OK);
     }
 	
 }

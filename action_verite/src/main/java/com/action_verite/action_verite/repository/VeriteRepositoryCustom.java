@@ -8,5 +8,7 @@ public interface VeriteRepositoryCustom {
 
     public Verite getRandomVerite();
 
+    public Verite getRandomVeriteByLevel(Integer level);
+
     public String resetVerites();
 }
