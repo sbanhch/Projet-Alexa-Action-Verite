@@ -87,6 +87,15 @@
                         "Dis moi les règles",
                         "Quelles sont les règles"
                     ]
+                },
+                {
+                    "name": "RankIntent",
+                    "slots": [],
+                    "samples": [
+                        "Classement",
+                        "Donne moi le classement",
+                        "Quel est le classement"
+                    ]
                 }
             ],
             "types": [
