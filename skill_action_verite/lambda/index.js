@@ -1,27 +1,33 @@
 const Alexa = require('ask-sdk-core');
 const axios = require('axios');
 
-//url
+//url api
 const url = 'http://52.71.239.125/';
 
 //appel api
-const fetchQuotes = async (param) => {
+const apiCallGetPut = async (type, param) => {
     try {
-        const { data } = await axios.get(url+param);
-        return data;
+        if (type === 'GET'){
+            const { data } = await axios.get(url+param);
+            return data;
+        } else if (type === 'PUT'){
+            const { data } = await axios.put(url+param);
+            return data;
+        }
     }
     catch(error) {
         console.log('cannot fetch quotes' + error);
-        return 'Le serveur n\'est pas joignable, impossible de jouer';
+        return 'ERROR';
     }
 };
-//fonction sleep
-function sleep(ms){
-    const date = Date.now();
-    let currentDate = null;
-    do {
-        currentDate = Date.now();
-    } while (currentDate - date < ms);
+//mise en forme du classement
+function affichage (json,x) {
+    let text = "";
+    for(let i = 0; i<x; i++) {
+        var j = i + 1;
+        text = text + "Joueur " + json[i].name + " est " +  j + " avec " + json[i].points + " points \n";
+    }
+    return text;
 }
 
 //Intent de départ
@@ -31,23 +37,48 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         console.log("Debut skill");
-        await fetchQuotes('verite/reset');
-        await fetchQuotes('action/reset');
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        sessionAttributes.nbPlayer = null;
-        sessionAttributes.nbRound = null;
-        sessionAttributes.playingRound = 1;
-        sessionAttributes.playingPlayer = 1;
-        sessionAttributes.playersTab = {};
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-        
-        const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie.';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
+        const resetTru = await apiCallGetPut('PUT', 'verite/reset');
+        const resetAct = await apiCallGetPut('PUT', 'action/reset');
+        if (resetAct === 'ERROR' || resetTru === 'ERROR'){
+            console.log('RESET TRUTH ' + resetTru);
+            console.log('RESET ACT ' + resetAct);
+            const speakOutput = 'Erreur sur le serveur. Il est impossible de jouer. Vraiment déso, je te dirai bien d\'appeler le service client pour te plaindre mais yen n\'a pas !';
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .withShouldEndSession(true)
+                .getResponse();
+        } else {
+            const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+            sessionAttributes.nbPlayer = null;
+            sessionAttributes.nbRound = null;
+            sessionAttributes.level = 1;
+            sessionAttributes.playingRound = 1;
+            sessionAttributes.playingPlayer = 1;
+            sessionAttributes.playersTab = {};
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+            
+            const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie.';
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt(speakOutput)
+                .getResponse();
+        }
     }
 };
+//Pour enoncer les regles
+const RulesIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RulesIntent'
+    },
+    handle(handlerInput) {
+        const speakOutput = 'Les règles sont les suivantes : le joueur choisit entre Action et Vérité. Si il choisit Vérité il doit alors répondre de façon sincère à une question posée. Sinon s\'il choisit Action, une action est donnée et le joueur doit l\'accomplir. Le joueur obtient 1 point en cas de succès 0 sinon. Bonne chance !';
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
+    }
+}
 // Intent initialisation
 const DialogIntentHandler = {
     canHandle(handlerInput) {
@@ -57,8 +88,9 @@ const DialogIntentHandler = {
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         
-        sessionAttributes.nbPlayer = handlerInput.requestEnvelope.request.intent.slots.joueurs.value;
-        sessionAttributes.nbRound = handlerInput.requestEnvelope.request.intent.slots.manches.value;
+        sessionAttributes.nbPlayer = Alexa.getSlotValue(handlerInput.requestEnvelope, 'joueurs');//handlerInput.requestEnvelope.request.intent.slots.joueurs.value;
+        sessionAttributes.nbRound = Alexa.getSlotValue(handlerInput.requestEnvelope, 'manches');//handlerInput.requestEnvelope.request.intent.slots.manches.value;
+        sessionAttributes.level = Alexa.getSlotValue(handlerInput.requestEnvelope, 'level');//handlerInput.requestEnvelope.request.intent.slots.level.value;
         
         const nbp = sessionAttributes.nbPlayer;
         
@@ -83,23 +115,33 @@ const GetActOrTruthIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ActionIntent';
     },
     async handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         //recupere la reponse du joueur (action ou verite)
         const aT = handlerInput.requestEnvelope.request.intent.slots.actOrTruth.resolutions.resolutionsPerAuthority[0].values[0].value.name;
         console.log(aT);
         //appel api
-        const apiResponse = await fetchQuotes(aT);
-        let result;
-        if (aT === "verite"){
-            result = apiResponse.verite;
-        } else if (aT === "action"){
-            result = apiResponse.action;
+        const apiResponse = await apiCallGetPut('GET', aT+'/level/'+sessionAttributes.level);
+        if (apiResponse === 'ERROR'){
+            const speakOutput = 'Rhalalalalalala Erreur sur le serveur. Impossible de jouer. Désolé mais on s\'arrete là...';
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .withShouldEndSession(true)
+                .getResponse();
+        }else{
+            let result;
+            if (aT === "verite"){
+                result = apiResponse.verite;
+            } else if (aT === "action"){
+                result = apiResponse.action;
+            }
+            console.log(aT + ' : ' + result);
+            // result = result + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>";
+            //retour
+            return handlerInput.responseBuilder
+                .addDelegateDirective('validationIntent')
+                .speak(result)
+                .getResponse();
         }
-        console.log(aT + ' : ' + result);
-        //retour
-        return handlerInput.responseBuilder
-            .addDelegateDirective('validationIntent')
-            .speak(result)
-            .getResponse();
     }
 };
 //gestion de la validation
@@ -119,17 +161,13 @@ const validationReponseIntentHandler = {
         if(validation === 'oui'){
             
             // on augmente le nb de point du Joueur
-            // ......
+            sessionAttributes.playersTab[sessionAttributes.playingPlayer].points += 1;
             
-            tourValide = `Réponse de ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} validée`;
+            tourValide = `Réponse de ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} validée. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].points} points`;
             sessionAttributes.playingPlayer++;
             attributesManager.setSessionAttributes(sessionAttributes);
         }
         else{
-            
-            // on réduit ou +0 le nb de point du Joueur
-            // ......
-            
             tourValide = `Réponse de ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} refusée`;
             sessionAttributes.playingPlayer++;
             attributesManager.setSessionAttributes(sessionAttributes);
@@ -145,8 +183,13 @@ const validationReponseIntentHandler = {
                     sessionAttributes.playingRound = 1;
                     sessionAttributes.playingPlayer = 1;
                     attributesManager.setSessionAttributes(sessionAttributes);
+                    
+                    let tabB = Object.values(sessionAttributes.playersTab);
+                    tabB.sort(function(a,b){return b.points - a.points;});
+                    let texteB = affichage(tabB, sessionAttributes.nbPlayer);
+                    
                     return handlerInput.responseBuilder
-                        .speak(`${tourValide}, Partie terminée`)
+                        .speak(`${tourValide}, Partie terminée, Voici le classement : ${texteB}`)
                         .withShouldEndSession(true)
                         .getResponse();
                 }
@@ -269,6 +312,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        RulesIntentHandler,
         DialogIntentHandler,
         GetActOrTruthIntentHandler,
         validationReponseIntentHandler,
