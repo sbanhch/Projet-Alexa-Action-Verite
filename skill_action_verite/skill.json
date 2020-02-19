@@ -3,27 +3,22 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1:027300229246:function:b73dd13c-97be-42d6-9b29-dcab0d0f7aea:Release_0"
+          "uri": "arn:aws:lambda:us-east-1:784806950204:function:3c5296c6-b628-406e-8ca8-00a9de338110:Release_0"
         },
         "interfaces": []
       }
     },
     "manifestVersion": "1.0",
-    "privacyAndCompliance": {
-      "locales": {
-        "fr-FR": {}
-      }
-    },
     "publishingInformation": {
       "locales": {
-        "fr-FR": {
+        "en-US": {
           "name": "Action ou Vérité",
-          "summary": "Jouer à Action ou Vérité.",
-          "description": "Jouer à Action ou Vérité à plusieurs.",
+          "summary": "Sample Short Description",
+          "description": "Sample Full Description",
           "examplePhrases": [
-            "Alexa open action ou vérité",
-            "Alexa ouvre action ou vérité",
-            "Alexa lance action ou vérité"
+            "Alexa open hello world",
+            "hello",
+            "help"
           ],
           "keywords": []
         }
