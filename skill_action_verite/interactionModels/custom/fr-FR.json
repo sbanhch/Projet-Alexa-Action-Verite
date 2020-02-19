@@ -1,438 +1,597 @@
 {
-    "interactionModel": {
-        "languageModel": {
-            "invocationName": "action ou vérité",
-            "intents": [
-                {
-                    "name": "AMAZON.CancelIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.HelpIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.StopIntent",
-                    "samples": []
-                },
-                {
-                    "name": "AMAZON.NavigateHomeIntent",
-                    "samples": []
-                },
-                {
-                    "name": "DialogIntent",
-                    "slots": [
-                        {
-                            "name": "joueurs",
-                            "type": "AMAZON.NUMBER",
-                            "samples": [
-                                "{joueurs}",
-                                "{joueurs} joueurs"
-                            ]
-                        },
-                        {
-                            "name": "manches",
-                            "type": "AMAZON.NUMBER",
-                            "samples": [
-                                "{manches}",
-                                "{manches} manches"
-                            ]
-                        },
-                        {
-                            "name": "level",
-                            "type": "AMAZON.NUMBER",
-                            "samples": [
-                                "je choisis {level}",
-                                "{level}"
-                            ]
-                        }
-                    ],
-                    "samples": [
-                        "commencer"
-                    ]
-                },
-                {
-                    "name": "ActionIntent",
-                    "slots": [
-                        {
-                            "name": "actOrTruth",
-                            "type": "SELFCHOICE",
-                            "samples": [
-                                "Je choisi {actOrTruth}",
-                                "{actOrTruth}",
-                                "Je veux une {actOrTruth}"
-                            ]
-                        }
-                    ],
-                    "samples": []
-                },
-                {
-                    "name": "validationIntent",
-                    "slots": [
-                        {
-                            "name": "statePlayer",
-                            "type": "validation"
-                        }
-                    ],
-                    "samples": [
-                        "Valider l'action",
-                        "Valider la vérité",
-                        "{statePlayer}"
-                    ]
-                },
-                {
-                    "name": "RulesIntent",
-                    "slots": [],
-                    "samples": [
-                        "Dis moi les règles",
-                        "Quelles sont les règles"
-                    ]
-                },
-                {
-                    "name": "RankIntent",
-                    "slots": [],
-                    "samples": [
-                        "Classement",
-                        "Donne moi le classement",
-                        "Quel est le classement"
-                    ]
-                }
-            ],
-            "types": [
-                {
-                    "name": "SELFCHOICE",
-                    "values": [
-                        {
-                            "id": "verite",
-                            "name": {
-                                "value": "verite",
-                                "synonyms": [
-                                    "vérité"
-                                ]
-                            }
-                        },
-                        {
-                            "id": "action",
-                            "name": {
-                                "value": "action"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "validation",
-                    "values": [
-                        {
-                            "id": "1",
-                            "name": {
-                                "value": "non",
-                                "synonyms": [
-                                    "no"
-                                ]
-                            }
-                        },
-                        {
-                            "id": "2",
-                            "name": {
-                                "value": "oui",
-                                "synonyms": [
-                                    "yes"
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ]
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "action ou verite",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
         },
-        "dialog": {
-            "intents": [
-                {
-                    "name": "DialogIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "joueurs",
-                            "type": "AMAZON.NUMBER",
-                            "confirmationRequired": true,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "confirmation": "Confirm.Slot.686776985214.636717041629",
-                                "elicitation": "Elicit.Slot.280092056003.1483478925489"
-                            },
-                            "validations": [
-                                {
-                                    "type": "isLessThanOrEqualTo",
-                                    "prompt": "Slot.Validation.297625403403.889267379386.1517330903595",
-                                    "value": "6"
-                                },
-                                {
-                                    "type": "isGreaterThanOrEqualTo",
-                                    "prompt": "Slot.Validation.297625403403.889267379386.820432956243",
-                                    "value": "2"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "manches",
-                            "type": "AMAZON.NUMBER",
-                            "confirmationRequired": true,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "confirmation": "Confirm.Slot.686776985214.923670904509",
-                                "elicitation": "Elicit.Slot.280092056003.1186574378010"
-                            },
-                            "validations": [
-                                {
-                                    "type": "isLessThanOrEqualTo",
-                                    "prompt": "Slot.Validation.297625403403.1114591874304.1440741376141",
-                                    "value": "5"
-                                },
-                                {
-                                    "type": "isGreaterThanOrEqualTo",
-                                    "prompt": "Slot.Validation.297625403403.1114591874304.973071577659",
-                                    "value": "2"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "level",
-                            "type": "AMAZON.NUMBER",
-                            "confirmationRequired": true,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "confirmation": "Confirm.Slot.1245449979992.774882649560",
-                                "elicitation": "Elicit.Slot.1245449979992.774882649560"
-                            },
-                            "validations": [
-                                {
-                                    "type": "isInSet",
-                                    "prompt": "Slot.Validation.1245449979992.774882649560.681484554886",
-                                    "values": [
-                                        "1",
-                                        "2",
-                                        "3"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "ActionIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "actOrTruth",
-                            "type": "SELFCHOICE",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.682263230644.122514007994"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "validationIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "statePlayer",
-                            "type": "validation",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.553745152913.1210298154602"
-                            }
-                        }
-                    ]
-                }
-            ],
-            "delegationStrategy": "ALWAYS"
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
         },
-        "prompts": [
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "DialogIntent",
+          "slots": [
             {
-                "id": "Elicit.Slot.395523227295.282504032206",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "I need to know the number of player to go further"
-                    }
-                ]
+              "name": "joueurs",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{joueurs}",
+                "{joueurs} joueurs"
+              ]
             },
             {
-                "id": "Elicit.Slot.802313159773.301271101753",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "How many rounds do you want for that game"
-                    },
-                    {
-                        "type": "PlainText",
-                        "value": "I need to know the number of rounds you want to go further"
-                    }
-                ]
+              "name": "manches",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{manches}",
+                "{manches} manches"
+              ]
             },
             {
-                "id": "Elicit.Slot.280092056003.1483478925489",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Combien y a t-il de joueurs ?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.280092056003.1483478925489",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "So you want {joueurs} players. Right ?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.280092056003.1186574378010",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Combien de manches voulez vous jouer ?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.280092056003.1186574378010",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "So you want {manches} rounds. Right ?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.280092056003",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "{joueurs} joueurs et {manches} manches. Est-ce correct ?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.1425691931721",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Voulez vous vraiment {actOrTruth} ?"
-                    }
-                ]
-            },
-            {
-                "id": "Slot.Validation.297625403403.889267379386.1517330903595",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Six joueurs maximum."
-                    }
-                ]
-            },
-            {
-                "id": "Slot.Validation.297625403403.889267379386.820432956243",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Deux joueurs minimum."
-                    }
-                ]
-            },
-            {
-                "id": "Slot.Validation.297625403403.1114591874304.1440741376141",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Maximum cinq manches."
-                    }
-                ]
-            },
-            {
-                "id": "Slot.Validation.297625403403.1114591874304.973071577659",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Minimum deux manches."
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.553745152913.1210298154602",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Validez-vous la réponse ?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.682263230644.122514007994",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Choisissez entre action et vérité."
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.686776985214.636717041629",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Vous voulez vraiment {joueurs} joueurs ?"
-                    },
-                    {
-                        "type": "PlainText",
-                        "value": "Vous avez dit {joueurs} joueurs ?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.686776985214.923670904509",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Vous avez dit {manches} manches ?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.1245449979992.774882649560",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Quelle difficulté voulez vous, choisissez entre un, deux ou trois pour facile, moyen ou difficile ?"
-                    }
-                ]
-            },
-            {
-                "id": "Slot.Validation.1245449979992.774882649560.681484554886",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Choisissez entre un, deux ou trois."
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.1245449979992.774882649560",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Vous avez dit {level} ?"
-                    }
-                ]
+              "name": "level",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "je choisis {level}",
+                "{level}"
+              ]
             }
+          ],
+          "samples": [
+            "commencer"
+          ]
+        },
+        {
+          "name": "ActionIntent",
+          "slots": [
+            {
+              "name": "actOrTruth",
+              "type": "SELFCHOICE",
+              "samples": [
+                "Je choisi {actOrTruth}",
+                "{actOrTruth}",
+                "Je veux une {actOrTruth}"
+              ]
+            }
+          ],
+          "samples": []
+        },
+        {
+          "name": "validationIntent",
+          "slots": [
+            {
+              "name": "statePlayer",
+              "type": "validation"
+            }
+          ],
+          "samples": [
+            "Valider l\u0027action",
+            "Valider la vérité",
+            "{statePlayer}"
+          ]
+        },
+        {
+          "name": "NameIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "samples": [
+                "{name}",
+                "mon nom est {name}",
+                "Je m\u0027appelle {name}"
+              ]
+            }
+          ],
+          "samples": []
+        },
+        {
+          "name": "SuperNameIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "samples": [
+                "{name}",
+                "mon nom est {name}",
+                "Je m\u0027appelle {name}"
+              ]
+            }
+          ],
+          "samples": []
+        },
+        {
+          "name": "RulesIntent",
+          "slots": [],
+          "samples": [
+            "Dis moi les règles",
+            "Quelles sont les règles"
+          ]
+        },
+        {
+          "name": "RestartIntent",
+          "slots": [],
+          "samples": [
+            "recommencer"
+          ]
+        },
+        {
+          "name": "RankIntent",
+          "slots": [],
+          "samples": [
+            "Classement",
+            "Donne moi le classement",
+            "Quel est le classement"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "id": "verite",
+              "name": {
+                "value": "verite",
+                "synonyms": [
+                  "vérité"
+                ]
+              }
+            },
+            {
+              "id": "action",
+              "name": {
+                "value": "action"
+              }
+            }
+          ],
+          "name": "SELFCHOICE"
+        },
+        {
+          "values": [
+            {
+              "id": "1",
+              "name": {
+                "value": "non",
+                "synonyms": [
+                  "no"
+                ]
+              }
+            },
+            {
+              "id": "2",
+              "name": {
+                "value": "oui",
+                "synonyms": [
+                  "yes"
+                ]
+              }
+            }
+          ],
+          "name": "validation"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "suivant"
+              }
+            },
+            {
+              "name": {
+                "value": "next"
+              }
+            },
+            {
+              "name": {
+                "value": "suite"
+              }
+            }
+          ],
+          "name": "suivant"
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "DialogIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "joueurs",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.686776985214.636717041629",
+                "elicitation": "Elicit.Slot.280092056003.1483478925489"
+              },
+              "validations": [
+                {
+                  "type": "isLessThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.889267379386.1517330903595",
+                  "value": "6"
+                },
+                {
+                  "type": "isGreaterThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.889267379386.820432956243",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "name": "manches",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.686776985214.923670904509",
+                "elicitation": "Elicit.Slot.280092056003.1186574378010"
+              },
+              "validations": [
+                {
+                  "type": "isLessThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.1114591874304.1440741376141",
+                  "value": "5"
+                },
+                {
+                  "type": "isGreaterThanOrEqualTo",
+                  "prompt": "Slot.Validation.297625403403.1114591874304.973071577659",
+                  "value": "2"
+                }
+              ]
+            },
+            {
+              "name": "level",
+              "type": "AMAZON.NUMBER",
+              "elicitationRequired": true,
+              "confirmationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.1245449979992.774882649560",
+                "elicitation": "Elicit.Slot.1245449979992.774882649560"
+              },
+              "validations": [
+                {
+                  "type": "isInSet",
+                  "prompt": "Slot.Validation.1245449979992.774882649560.681484554886",
+                  "values": [
+                    "1",
+                    "2",
+                    "3"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ActionIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "actOrTruth",
+              "type": "SELFCHOICE",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.682263230644.122514007994"
+              }
+            }
+          ]
+        },
+        {
+          "name": "validationIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "statePlayer",
+              "type": "validation",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.553745152913.1210298154602"
+              }
+            }
+          ]
+        },
+        {
+          "name": "RestartIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": []
+        },
+        {
+          "name": "NameIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.473406547879.392445624131"
+              }
+            }
+          ]
+        },
+        {
+          "name": "SuperNameIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1175658635952.1292156264492"
+              }
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.395523227295.282504032206",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I need to know the number of player to go further"
+          }
         ]
-    }
+      },
+      {
+        "id": "Elicit.Slot.802313159773.301271101753",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "How many rounds do you want for that game"
+          },
+          {
+            "type": "PlainText",
+            "value": "I need to know the number of rounds you want to go further"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.280092056003.1483478925489",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Combien y a t-il de joueurs ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.280092056003.1483478925489",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "So you want {joueurs} players. Right ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.280092056003.1186574378010",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Combien de manches voulez vous jouer ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.280092056003.1186574378010",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "So you want {manches} rounds. Right ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.280092056003",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "{joueurs} joueurs et {manches} manches. Est-ce correct ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1425691931721",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Voulez vous vraiment {actOrTruth} ?"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.889267379386.1517330903595",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Six joueurs maximum."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.889267379386.820432956243",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Deux joueurs minimum."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.1114591874304.1440741376141",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Maximum cinq manches."
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.297625403403.1114591874304.973071577659",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Minimum deux manches."
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.553745152913.1210298154602",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Validez-vous la réponse ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.682263230644.122514007994",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Choisissez entre action et vérité."
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.686776985214.636717041629",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Vous voulez vraiment {joueurs} joueurs ?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Vous avez dit {joueurs} joueurs ?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.686776985214.923670904509",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Vous avez dit {manches} manches ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1245449979992.774882649560",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Quelle difficulté voulez vous, choisissez entre un, deux ou trois pour facile, moyen ou difficile ?"
+          }
+        ]
+      },
+      {
+        "id": "Slot.Validation.1245449979992.774882649560.681484554886",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Choisissez entre un, deux ou trois."
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.1245449979992.774882649560",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Vous avez dit {level} ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.171592564701.628997192316",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Voulez vous recommencer une partie ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1389873136462.429582508431",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Quel est ton nom ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.933324567759.1006974937493",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Quel est le nom du joueur ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1373362423628.1113060569748",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Dites suivant pour passer à la suite."
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1561352155222.618186127596",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "B Quel est le nom du joueur ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.473406547879.392445624131",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Comment vous appelez vous ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1175658635952.1292156264492",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Quel est votre nom ?"
+          }
+        ]
+      }
+    ]
+  },
+  "version": "48"
 }
