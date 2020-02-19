@@ -25,7 +25,7 @@ function affichage (tab,x) {
     let text = "";
     for(let i = 0; i<x; i++) {
         var j = i + 1;
-        text = text + "Joueur " + tab[i].name + " est " +  j + " avec " + tab[i].points + " points \n";
+        text = text + tab[i].name + " est numéro " +  j + " avec " + tab[i].points + " points.\n";
     }
     return text;
 }
@@ -48,15 +48,15 @@ const LaunchRequestHandler = {
         if (resetAct === 'ERROR' || resetTru === 'ERROR'){
             console.log('RESET TRUTH ' + resetTru);
             console.log('RESET ACT ' + resetAct);
-            const speakOutput = 'Erreur sur le serveur. Il est impossible de jouer. Vraiment déso, je te dirai bien d\'appeler le service client pour te plaindre mais yen n\'a pas !';
+            const speakOutput = 'Erreur sur le serveur. Il est impossible de jouer. Vraiment déso, je te dirai bien d\'appeler le service client pour te plaindre mais y en n\'a pas !';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .withShouldEndSession(true)
                 .getResponse();
         } else {
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-            sessionAttributes.nbPlayer = 0;
-            sessionAttributes.nbRound = 0;
+            sessionAttributes.nbPlayer = null;
+            sessionAttributes.nbRound = null;
             sessionAttributes.level = 1;
             sessionAttributes.playingRound = 1;
             sessionAttributes.playingPlayer = 1;
@@ -64,7 +64,7 @@ const LaunchRequestHandler = {
             sessionAttributes.playersTab = {};
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
-            const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie.';
+            const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie. Les règles sont disponible en me disant "Donne moi les règles".';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .reprompt(speakOutput)
@@ -105,7 +105,7 @@ const RankIntentHandler = {
         let currentActTruth = "";
         let speakOutput = "";
         // SI ACTION/VÉRITÉ STOCKÉ DANS sessionAttributes
-        if(sessionAttributes.actVeritStocked!=null){
+        if(sessionAttributes.actVeritStocked!==null){
             directive = 'validationIntent';
             currentActTruth = sessionAttributes.actVeritStocked;
         }
@@ -115,12 +115,13 @@ const RankIntentHandler = {
         }
 
         // SI L'INITIALISATION N'EST PAS ENCORE FAITE, ON APPELLE 'DialogIntent'
-        if(sessionAttributes.nbPlayer==null || sessionAttributes.nbRound==null){
+        if(sessionAttributes.nbPlayer===null || sessionAttributes.nbRound===null){
             directive = '';
             speakOutput = "Aucun classement pour l'instant, Dîtes 'commencer' pour démarrer la partie";
         }
         else{
             speakOutput = `Voici le classement : ${texteB}, ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous. ${currentActTruth}`;
+            speakOutput = speakOutput + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>";
         }
 
 
@@ -140,9 +141,9 @@ const DialogIntentHandler = {
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         
-        sessionAttributes.nbPlayer = Alexa.getSlotValue(handlerInput.requestEnvelope, 'joueurs');//handlerInput.requestEnvelope.request.intent.slots.joueurs.value;
-        sessionAttributes.nbRound = Alexa.getSlotValue(handlerInput.requestEnvelope, 'manches');//handlerInput.requestEnvelope.request.intent.slots.manches.value;
-        sessionAttributes.level = Alexa.getSlotValue(handlerInput.requestEnvelope, 'level');//handlerInput.requestEnvelope.request.intent.slots.level.value;
+        sessionAttributes.nbPlayer = Alexa.getSlotValue(handlerInput.requestEnvelope, 'joueurs');
+        sessionAttributes.nbRound = Alexa.getSlotValue(handlerInput.requestEnvelope, 'manches');
+        sessionAttributes.level = Alexa.getSlotValue(handlerInput.requestEnvelope, 'level');
         sessionAttributes.nameToDefine = sessionAttributes.nbPlayer;
         const nbp = sessionAttributes.nbPlayer;
         
@@ -152,7 +153,7 @@ const DialogIntentHandler = {
         
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         
-        const speakOutput = "Nous allons maintenant vous demander vos noms";
+        const speakOutput = `Nous allons maintenant vous demander vos noms. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name}` ;
         return handlerInput.responseBuilder
             .addDelegateDirective('NameIntent')
             .speak(speakOutput)
@@ -164,9 +165,8 @@ const DialogIntentHandler = {
 // gestion des noms des joueurs
 const NameIntentHandler = {
     canHandle(handlerInput) {
-        return (Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'NameIntent') || (Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SuperNameIntent')
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'NameIntent' || Alexa.getIntentName(handlerInput.requestEnvelope) === 'SuperNameIntent')
     },
     handle(handlerInput) {
         let currentIntent = handlerInput.requestEnvelope.request.intent;
@@ -193,7 +193,7 @@ const NameIntentHandler = {
                 .speak(speakOutput)
                 .getResponse();
             
-        } else if (sessionAttributes.playingPlayer == sessionAttributes.nbPlayer) {
+        } else if (String(sessionAttributes.playingPlayer) === String(sessionAttributes.nbPlayer)) {
             console.log('Dans ===========');
             sessionAttributes.playersTab[sessionAttributes.playingPlayer].name = Alexa.getSlotValue(handlerInput.requestEnvelope, 'name');
             console.log('nom modifié '+sessionAttributes.playersTab[sessionAttributes.playingPlayer].name);
@@ -300,7 +300,7 @@ const validationReponseIntentHandler = {
                             confirmationStatus: 'NONE',
                             slots: {}
                         })
-                        .speak(`${tourValide}, Partie terminée, Voici le classement : ${texteB}. .... Dites "recommencer" pour recommencer une nouvelle partie en gardant les mêmes paramètres.`)
+                        .speak(`${tourValide}, Partie terminée, Voici le classement : ${texteB}. .... Dites "recommencer" pour recommencer une nouvelle partie en gardant les mêmes paramètres ou dites "stop" pour quitter.`)
                         .getResponse();
                 }
                 else{
@@ -461,8 +461,3 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler,
     )
     .lambda();
-
-
-
-
-

@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "action ou verite",
+      "invocationName": "action ou vérité",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -48,7 +48,9 @@
             }
           ],
           "samples": [
-            "commencer"
+            "commencer",
+            "commencez",
+            "commencé"
           ]
         },
         {
@@ -115,14 +117,17 @@
           "slots": [],
           "samples": [
             "Dis moi les règles",
-            "Quelles sont les règles"
+            "Quelles sont les règles",
+            "Donne moi les règles"
           ]
         },
         {
           "name": "RestartIntent",
           "slots": [],
           "samples": [
-            "recommencer"
+            "recommencer",
+            "recommencez",
+            "recommencé"
           ]
         },
         {
@@ -178,26 +183,6 @@
             }
           ],
           "name": "validation"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "suivant"
-              }
-            },
-            {
-              "name": {
-                "value": "next"
-              }
-            },
-            {
-              "name": {
-                "value": "suite"
-              }
-            }
-          ],
-          "name": "suivant"
         }
       ]
     },
@@ -214,8 +199,8 @@
               "elicitationRequired": true,
               "confirmationRequired": true,
               "prompts": {
-                "confirmation": "Confirm.Slot.686776985214.636717041629",
-                "elicitation": "Elicit.Slot.280092056003.1483478925489"
+                "elicitation": "Elicit.Slot.280092056003.1483478925489",
+                "confirmation": "Confirm.Slot.686776985214.636717041629"
               },
               "validations": [
                 {
@@ -236,8 +221,8 @@
               "elicitationRequired": true,
               "confirmationRequired": true,
               "prompts": {
-                "confirmation": "Confirm.Slot.686776985214.923670904509",
-                "elicitation": "Elicit.Slot.280092056003.1186574378010"
+                "elicitation": "Elicit.Slot.280092056003.1186574378010",
+                "confirmation": "Confirm.Slot.686776985214.923670904509"
               },
               "validations": [
                 {
@@ -258,8 +243,8 @@
               "elicitationRequired": true,
               "confirmationRequired": true,
               "prompts": {
-                "confirmation": "Confirm.Slot.1245449979992.774882649560",
-                "elicitation": "Elicit.Slot.1245449979992.774882649560"
+                "elicitation": "Elicit.Slot.1245449979992.774882649560",
+                "confirmation": "Confirm.Slot.1245449979992.774882649560"
               },
               "validations": [
                 {
@@ -593,5 +578,5 @@
       }
     ]
   },
-  "version": "48"
+  "version": "59"
 }

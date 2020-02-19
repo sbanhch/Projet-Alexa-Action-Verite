@@ -3,24 +3,19 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1:784806950204:function:3c5296c6-b628-406e-8ca8-00a9de338110:Release_0"
+          "uri": "arn:aws:lambda:us-east-1:027300229246:function:b73dd13c-97be-42d6-9b29-dcab0d0f7aea:Release_0"
         },
         "interfaces": []
       }
     },
     "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "locales": {}
+    },
     "publishingInformation": {
       "locales": {
-        "en-US": {
-          "name": "Action ou Vérité",
-          "summary": "Sample Short Description",
-          "description": "Sample Full Description",
-          "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
-          ],
-          "keywords": []
+        "fr-FR": {
+          "name": "Action ou Vérité"
         }
       },
       "isAvailableWorldwide": true,
