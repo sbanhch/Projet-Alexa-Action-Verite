@@ -21,13 +21,19 @@ const apiCallGetPut = async (type, param) => {
     }
 };
 //mise en forme du classement
-function affichage (json,x) {
+function affichage (tab,x) {
     let text = "";
     for(let i = 0; i<x; i++) {
         var j = i + 1;
-        text = text + "Joueur " + json[i].name + " est " +  j + " avec " + json[i].points + " points \n";
+        text = text + "Joueur " + tab[i].name + " est " +  j + " avec " + tab[i].points + " points \n";
     }
     return text;
+}
+
+function resetPoints(tab,x) {
+    for(let i=1; i<=x; i++) {
+        tab[i].points = 0;
+    }
 }
 
 //Intent de départ
@@ -49,14 +55,15 @@ const LaunchRequestHandler = {
                 .getResponse();
         } else {
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-            sessionAttributes.nbPlayer = null;
-            sessionAttributes.nbRound = null;
+            sessionAttributes.nbPlayer = 0;
+            sessionAttributes.nbRound = 0;
             sessionAttributes.level = 1;
             sessionAttributes.playingRound = 1;
             sessionAttributes.playingPlayer = 1;
+            sessionAttributes.countPlayer = 1;
             sessionAttributes.playersTab = {};
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
+            
             const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie.';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
@@ -132,27 +139,77 @@ const DialogIntentHandler = {
     },
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-
+        
         sessionAttributes.nbPlayer = Alexa.getSlotValue(handlerInput.requestEnvelope, 'joueurs');//handlerInput.requestEnvelope.request.intent.slots.joueurs.value;
         sessionAttributes.nbRound = Alexa.getSlotValue(handlerInput.requestEnvelope, 'manches');//handlerInput.requestEnvelope.request.intent.slots.manches.value;
         sessionAttributes.level = Alexa.getSlotValue(handlerInput.requestEnvelope, 'level');//handlerInput.requestEnvelope.request.intent.slots.level.value;
-
+        sessionAttributes.nameToDefine = sessionAttributes.nbPlayer;
         const nbp = sessionAttributes.nbPlayer;
-
+        
         for(var i=1; i<=nbp; i++) {
             sessionAttributes.playersTab[i] = { name:'Player '+i, points: 0 };
         }
-
+        
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
-        const speakOutput = `${nbp} joueurs et ${sessionAttributes.nbRound} manches. La partie peut débuter. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous.`;
+        
+        const speakOutput = "Nous allons maintenant vous demander vos noms";
         return handlerInput.responseBuilder
-            .addDelegateDirective('ActionIntent')
+            .addDelegateDirective('NameIntent')
             .speak(speakOutput)
             .reprompt(speakOutput)
             .getResponse();
     }
 };
+
+// gestion des noms des joueurs
+const NameIntentHandler = {
+    canHandle(handlerInput) {
+        return (Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'NameIntent') || (Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SuperNameIntent')
+    },
+    handle(handlerInput) {
+        let currentIntent = handlerInput.requestEnvelope.request.intent;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        console.log('Dans intent name '+sessionAttributes.playingPlayer);
+        console.log(sessionAttributes.nbPlayer)
+        console.log(currentIntent)
+        if (currentIntent.name === 'NameIntent'){
+            currentIntent = 'SuperNameIntent';
+        } else if (currentIntent.name === 'SuperNameIntent') {
+            currentIntent = 'NameIntent';
+        }
+        
+        if (sessionAttributes.playingPlayer < sessionAttributes.nbPlayer){
+            sessionAttributes.playersTab[sessionAttributes.playingPlayer].name = Alexa.getSlotValue(handlerInput.requestEnvelope, 'name');
+            console.log('nom modifié '+sessionAttributes.playersTab[sessionAttributes.playingPlayer].name);
+            sessionAttributes.playingPlayer++;
+            console.log('on passe à '+sessionAttributes.playingPlayer);
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+            
+            const speakOutput = `${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name}`;
+            return handlerInput.responseBuilder
+                .addDelegateDirective(currentIntent)
+                .speak(speakOutput)
+                .getResponse();
+            
+        } else if (sessionAttributes.playingPlayer == sessionAttributes.nbPlayer) {
+            console.log('Dans ===========');
+            sessionAttributes.playersTab[sessionAttributes.playingPlayer].name = Alexa.getSlotValue(handlerInput.requestEnvelope, 'name');
+            console.log('nom modifié '+sessionAttributes.playersTab[sessionAttributes.playingPlayer].name);
+            sessionAttributes.playingPlayer = 1;
+            console.log('on reset à '+sessionAttributes.playingPlayer);
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+            
+            const speakOutput = `Nous pouvons commencer la partie. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous.`;
+            return handlerInput.responseBuilder
+                .addDelegateDirective('ActionIntent')
+                .speak(speakOutput)
+                .getResponse();
+        }
+    }
+}
+
 // Intent Api
 const GetActOrTruthIntentHandler = {
     canHandle(handlerInput) {
@@ -177,14 +234,12 @@ const GetActOrTruthIntentHandler = {
             if (aT === "verite"){
                 result = apiResponse.verite;
                 sessionAttributes.actVeritStocked = result;
-
             } else if (aT === "action"){
                 result = apiResponse.action;
                 sessionAttributes.actVeritStocked = result;
             }
-            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             console.log(aT + ' : ' + result);
-            //result = result + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>";
+            result = result + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>";
             //retour
             return handlerInput.responseBuilder
                 .addDelegateDirective('validationIntent')
@@ -204,14 +259,14 @@ const validationReponseIntentHandler = {
         const sessionAttributes = attributesManager.getSessionAttributes();
         //recupere oui ou non
         const validation = Alexa.getSlotValue(requestEnvelope, 'statePlayer');
-
+        
         let tourValide = null;  // string message si tour validé ou non
-
+        
         if(validation === 'oui'){
-
+            
             // on augmente le nb de point du Joueur
             sessionAttributes.playersTab[sessionAttributes.playingPlayer].points += 1;
-
+            
             tourValide = `Réponse de ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} validée. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].points} points`;
             sessionAttributes.playingPlayer++;
             sessionAttributes.actVeritStocked = null;
@@ -223,7 +278,7 @@ const validationReponseIntentHandler = {
             sessionAttributes.actVeritStocked = null;
             attributesManager.setSessionAttributes(sessionAttributes);
         }
-
+        
         if(sessionAttributes.playingRound <= sessionAttributes.nbRound){
             // Si tous les joueurs ont déjà jouer dans la manche actuelle
             if(sessionAttributes.playingPlayer > sessionAttributes.nbPlayer){
@@ -234,14 +289,18 @@ const validationReponseIntentHandler = {
                     sessionAttributes.playingRound = 1;
                     sessionAttributes.playingPlayer = 1;
                     attributesManager.setSessionAttributes(sessionAttributes);
-
+                    
                     let tabB = Object.values(sessionAttributes.playersTab);
                     tabB.sort(function(a,b){return b.points - a.points;});
                     let texteB = affichage(tabB, sessionAttributes.nbPlayer);
-
+                    
                     return handlerInput.responseBuilder
-                        .speak(`${tourValide}, Partie terminée, Voici le classement : ${texteB}`)
-                        .withShouldEndSession(true)
+                        .addDelegateDirective({
+                            name: 'RestartIntent',
+                            confirmationStatus: 'NONE',
+                            slots: {}
+                        })
+                        .speak(`${tourValide}, Partie terminée, Voici le classement : ${texteB}. .... Dites "recommencer" pour recommencer une nouvelle partie en gardant les mêmes paramètres.`)
                         .getResponse();
                 }
                 else{
@@ -274,11 +333,34 @@ const validationReponseIntentHandler = {
             attributesManager.setSessionAttributes(sessionAttributes);
             return handlerInput.responseBuilder
                 .speak(`${tourValide}, Partie terminée`)
-                .withShouldEndSession(true)     // à supprimer si on veux redémarrer une partie avec les mêmes nombres de joueurs et de manches
                 .getResponse();
         }
     }
 }
+
+//Lancement d'une nouvelle partie
+const RestartIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RestartIntent';
+    },
+    async handle(handlerInput) {
+        //Reset des actions et des vérités
+        const resetTru = await apiCallGetPut('PUT', 'verite/reset');
+        const resetAct = await apiCallGetPut('PUT', 'action/reset');
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        //Reset des points des joueurs
+        resetPoints(sessionAttributes.playersTab, sessionAttributes.nbPlayer);
+        const nbp = sessionAttributes.nbPlayer;
+        const speakOutput = `${nbp} joueurs et ${sessionAttributes.nbRound} manches. La partie peut recommencer. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous.`;
+        return handlerInput.responseBuilder
+            .addDelegateDirective('ActionIntent')
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+}
+
 
 const HelpIntentHandler = {
     canHandle(handlerInput) {
@@ -366,8 +448,10 @@ exports.handler = Alexa.SkillBuilders.custom()
         RulesIntentHandler,
         RankIntentHandler,
         DialogIntentHandler,
+        NameIntentHandler,
         GetActOrTruthIntentHandler,
         validationReponseIntentHandler,
+        RestartIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
@@ -377,3 +461,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         ErrorHandler,
     )
     .lambda();
+
+
+
+
+
