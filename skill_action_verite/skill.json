@@ -1,5 +1,38 @@
 {
   "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "fr-FR": {
+          "summary": "Jeu de action ou vérité à plusieurs joueurs.",
+          "examplePhrases": [
+            "Alexa lance action ou vérité",
+            "Alexa action ou vérité"
+          ],
+          "keywords": [
+            "Action",
+            "vérité",
+            "jeu",
+            "point",
+            "classement",
+            "jouer",
+            "amuser",
+            "ami",
+            "bien"
+          ],
+          "name": "Action ou Vérité",
+          "smallIconUri": "file://assets/images/fr-FR_smallIconUri.png",
+          "description": "Jeu de action ou vérité à plusieurs joueurs et plusieurs manches.",
+          "updatesDescription": "2ieme version\nAjout de la difficulté\nAjout du système de point\nAjout du classement\nAjout de l’énonciation des règles\nAjout du redémarrage d\u0027une partie",
+          "largeIconUri": "file://assets/images/fr-FR_largeIconUri.png"
+        }
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": [
+        "FR"
+      ]
+    },
     "apis": {
       "custom": {
         "endpoint": {
@@ -10,18 +43,14 @@
     },
     "manifestVersion": "1.0",
     "privacyAndCompliance": {
-      "locales": {}
-    },
-    "publishingInformation": {
+      "allowsPurchases": false,
       "locales": {
-        "fr-FR": {
-          "name": "Action ou Vérité"
-        }
+        "fr-FR": {}
       },
-      "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "KNOWLEDGE_AND_TRIVIA",
-      "distributionCountries": []
+      "isExportCompliant": true,
+      "containsAds": false,
+      "isChildDirected": false,
+      "usesPersonalInfo": false
     }
   }
 }

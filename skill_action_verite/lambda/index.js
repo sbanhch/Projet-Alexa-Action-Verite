@@ -1,25 +1,57 @@
 const Alexa = require('ask-sdk-core');
-const axios = require('axios');
+const sa = require('superagent');
 
 //url api
-const url = 'http://52.71.239.125/';
+const url = 'http://34.238.113.165/';
 
 //appel api
 const apiCallGetPut = async (type, param) => {
-    try {
-        if (type === 'GET'){
-            const { data } = await axios.get(url+param);
-            return data;
-        } else if (type === 'PUT'){
-            const { data } = await axios.put(url+param);
-            return data;
-        }
-    }
-    catch(error) {
-        console.log('cannot fetch quotes' + error);
-        return 'ERROR';
+    console.log('dans fonction apiCallGetPut');
+    if (type === 'GET'){
+        const reqGet = await sa.get(url+param)
+            .timeout({
+                response: 5000,
+                deadline: 60000,
+            })
+            .then(res => {
+                console.log(res);
+                return res;
+            }, err => {
+                if (err.timeout) {
+                    console.log('TIMEOUT ERROR');
+                    return 'ERROR';
+                } else {
+                    console.log('ERROR');
+                    return 'ERROR';
+                }
+            });
+        console.log('res req');
+        console.log(reqGet);
+        return reqGet;
+    } else if (type === 'PUT'){
+        const reqPut = await sa.put(url+param)
+            .timeout({
+                response: 5000,  // Wait 5 seconds for the server to start sending,
+                deadline: 60000, // but allow 1 minute for the file to finish loading.
+            })
+            .then(res => {
+                console.log(res);
+                return res;
+            }, err => {
+                if (err.timeout) {
+                    console.log('TIMEOUT ERROR');
+                    return 'ERROR';
+                } else {
+                    console.log('ERROR');
+                    return 'ERROR';
+                }
+            });
+        console.log('res req');
+        console.log(reqPut);
+        return reqPut;
     }
 };
+
 //mise en forme du classement
 function affichage (tab,x) {
     let text = "";
@@ -43,33 +75,44 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         console.log("Debut skill");
+        //faire le 1er > si erreur arreter > sinon faire 2ieme > si erreur arreter > sinon continuer
         const resetTru = await apiCallGetPut('PUT', 'verite/reset');
-        const resetAct = await apiCallGetPut('PUT', 'action/reset');
-        if (resetAct === 'ERROR' || resetTru === 'ERROR'){
-            console.log('RESET TRUTH ' + resetTru);
-            console.log('RESET ACT ' + resetAct);
+        console.log(resetTru);
+        if (resetTru === 'ERROR'){
+            console.log('dans erreur tru');
             const speakOutput = 'Erreur sur le serveur. Il est impossible de jouer. Vraiment déso, je te dirai bien d\'appeler le service client pour te plaindre mais y en n\'a pas !';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .withShouldEndSession(true)
                 .getResponse();
-        } else {
-            const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-            sessionAttributes.nbPlayer = null;
-            sessionAttributes.nbRound = null;
-            sessionAttributes.level = 1;
-            sessionAttributes.playingRound = 1;
-            sessionAttributes.playingPlayer = 1;
-            sessionAttributes.countPlayer = 1;
-            sessionAttributes.playersTab = {};
-            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-            
-            const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie. Les règles sont disponible en me disant "Donne moi les règles".';
+        }
+        const resetAct = await apiCallGetPut('PUT', 'action/reset');
+        console.log(resetAct);
+        if (resetAct === 'ERROR'){
+            console.log('dans erreur act');
+            const speakOutput = 'Erreur sur le serveur. Il est impossible de jouer. Vraiment déso, je te dirai bien d\'appeler le service client pour te plaindre mais y en n\'a pas !';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt(speakOutput)
+                .withShouldEndSession(true)
                 .getResponse();
         }
+        console.log("skill apres reset");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.nbPlayer = null;
+        sessionAttributes.nbRound = null;
+        sessionAttributes.actVeritStocked = null;
+        sessionAttributes.level = 1;
+        sessionAttributes.playingRound = 1;
+        sessionAttributes.playingPlayer = 1;
+        sessionAttributes.countPlayer = 1;
+        sessionAttributes.playersTab = {};
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        
+        const speakOutput = 'Bonjour et bienvenue sur Action ou Vérité. Dites "commencer" pour commencer une nouvelle partie. Les règles sont disponible en me disant "Donne moi les règles".';
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
     }
 };
 //Pour enoncer les regles
@@ -79,9 +122,41 @@ const RulesIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RulesIntent'
     },
     handle(handlerInput) {
-        const speakOutput = 'Les règles sont les suivantes : le joueur choisit entre Action et Vérité. Si il choisit Vérité il doit alors répondre de façon sincère à une question posée. Sinon s\'il choisit Action, une action est donnée et le joueur doit l\'accomplir. Le joueur obtient 1 point en cas de succès 0 sinon. Bonne chance !';
-
+        let speakOutput = 'Les règles sont les suivantes : le joueur choisit entre Action et Vérité. Si il choisit Vérité il doit alors répondre de façon sincère à une question posée. Sinon s\'il choisit Action, une action est donnée et le joueur doit l\'accomplir. Le joueur obtient 1 point en cas de succès 0 sinon. Bonne chance !';
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        let tabB = Object.values(sessionAttributes.playersTab);
+        
+        
+        // choix de l'intent en fonction de si le joueur demande le classement avant/après son action/vérité ou la validation de l'initialisation
+        let directive = null;
+        let currentActTruth = "";
+        // Si action/vérité stocké dans sessionAttributes
+        if(sessionAttributes.actVeritStocked !== null) {
+            directive = 'validationIntent';
+            currentActTruth = sessionAttributes.actVeritStocked;
+            console.log("Apres regle va dans validation intent");
+        }
+        else {
+            directive = 'ActionIntent';
+            currentActTruth = "";
+            console.log("Apres regle va dans action intent");
+        }
+        
+        //si l'initialisation n'est pas encore faite, on appelle 'DialogIntent'
+        if(sessionAttributes.nbPlayer === null || sessionAttributes.nbRound === null || sessionAttributes.level === null) {
+            directive = 'DialogIntent';
+            console.log("Apres regle va dans dialog intent");
+        }
+        //si l'initialisation est faite mais les noms pas définis, on appelle 'NameIntent'
+        else if(sessionAttributes.playersTab[sessionAttributes.nbPlayer].name === 'Player ' + sessionAttributes.nbPlayer) {
+            directive = 'NameIntent';
+            console.log("Apres regle va dans name intent");
+        }
+        else {
+            speakOutput = speakOutput + ` ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous. ${currentActTruth}`;
+        }
         return handlerInput.responseBuilder
+            .addDelegateDirective(directive)
             .speak(speakOutput)
             .getResponse();
     }
@@ -115,13 +190,17 @@ const RankIntentHandler = {
         }
 
         // SI L'INITIALISATION N'EST PAS ENCORE FAITE, ON APPELLE 'DialogIntent'
-        if(sessionAttributes.nbPlayer===null || sessionAttributes.nbRound===null){
+        if(sessionAttributes.nbPlayer===null || sessionAttributes.nbRound===null || sessionAttributes.level === null){
             directive = '';
             speakOutput = "Aucun classement pour l'instant, Dîtes 'commencer' pour démarrer la partie";
         }
+        //si l'initialisation est faite mais les noms pas définis, on appelle 'NameIntent'
+        else if(sessionAttributes.playersTab[sessionAttributes.nbPlayer].name === 'Player ' + sessionAttributes.nbPlayer) {
+            directive = 'NameIntent';
+            speakOutput = "Aucun classement pour l'instant";
+        }
         else{
             speakOutput = `Voici le classement : ${texteB}, ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous. ${currentActTruth}`;
-            speakOutput = speakOutput + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>";
         }
 
 
@@ -232,10 +311,10 @@ const GetActOrTruthIntentHandler = {
         }else{
             let result;
             if (aT === "verite"){
-                result = apiResponse.verite;
+                result = apiResponse.body.verite;
                 sessionAttributes.actVeritStocked = result;
             } else if (aT === "action"){
-                result = apiResponse.action;
+                result = apiResponse.body.action;
                 sessionAttributes.actVeritStocked = result;
             }
             console.log(aT + ' : ' + result);
@@ -349,12 +428,27 @@ const RestartIntentHandler = {
         const resetTru = await apiCallGetPut('PUT', 'verite/reset');
         const resetAct = await apiCallGetPut('PUT', 'action/reset');
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        //Reset des points des joueurs
-        resetPoints(sessionAttributes.playersTab, sessionAttributes.nbPlayer);
-        const nbp = sessionAttributes.nbPlayer;
-        const speakOutput = `${nbp} joueurs et ${sessionAttributes.nbRound} manches. La partie peut recommencer. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous.`;
+        var speakOutput, directive;
+        if(sessionAttributes.nbPlayer===null || sessionAttributes.nbRound===null || sessionAttributes.level === null){
+         
+            directive = '';
+            speakOutput = "Partie pas encore commencée pour l'instant, dites 'commencer' pour démarrer la partie";
+        }
+        else if (sessionAttributes.playersTab[sessionAttributes.nbPlayer].name === 'Player ' + sessionAttributes.nbPlayer){
+            directive = 'NameIntent';
+            speakOutput = '';
+        }
+        else {
+            directive = 'ActionIntent';
+            //Reset des points des joueurs
+            resetPoints(sessionAttributes.playersTab, sessionAttributes.nbPlayer);
+            const nbp = sessionAttributes.nbPlayer;
+            speakOutput = `${nbp} joueurs et ${sessionAttributes.nbRound} manches. La partie peut recommencer. ${sessionAttributes.playersTab[sessionAttributes.playingPlayer].name} c'est à vous.`;
+        
+        }
+        
         return handlerInput.responseBuilder
-            .addDelegateDirective('ActionIntent')
+            .addDelegateDirective(directive)
             .speak(speakOutput)
             .reprompt(speakOutput)
             .getResponse();
