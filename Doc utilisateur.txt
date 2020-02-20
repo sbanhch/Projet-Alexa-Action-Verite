@@ -1,0 +1,35 @@
+Guide Utilisation de l'application "Action ou Vérité".
+
+======================INITIALISATION============================================
+Etape 1 : Dire "Ouvre action vérité" // "Ouvre action ou vérité".
+Etape 2 : Dire "Commencer".
+Etape 3 : Préciser le nombre de joueurs.
+Etape 4 : Valider le nombre de joueurs par "oui" ou par "non".
+Etape 5 : Préciser le nombre de manches.
+Etape 6 : Valider le nombre de joueurs par "oui" ou par "non".
+Etape 7 : Préciser la difficulté du jeu par "un", "deux" ou "trois".
+Etape 8 : Valider la difficulté par "oui" ou par "non".
+Etape 9 : Préciser les noms des joueurs.
+
+======================DEBUT DE PARTIE============================================
+Etape 1 : Début de la manche.	<-----------------------------------------------------------------------------------------------------------------------|
+Etape 2 : Choisir entre "Action" et "Vérité" en disant simplement "Action" ou "Vérité".	<--------							|
+Etape 3 : Répondre à la vérité ou faire l'action.						|							| Se répète autant
+Etape 4 : Le joueur suivant valide l'action ou la vérité en disant "oui" ou "non".		|							| de fois qu'il y a
+Etape 5 : Attribution d'un point si le joueur dit "oui" sinon 0 point.				| Se répète autant de fois qu'il y a de joueur.		| de manche.
+Etape 6 : Fin du tour du joueur. ---------------------------------------------------------------|							|
+Etape 7 : Fin de manche.---------------------------------------------------------------------------------------------------------------------------------
+
+
+======================FIN DE PARTIE============================================
+Etape 1 : Donne le classement des joueurs.
+Etape 2 : Si le joueur dit " recommencer" la partie recommencera avec la même configuration.
+
+======================AUTRES COMMANDES===========================================
+régles => "Dis moi les régles" , "Quelles sont les régles".
+
+Permet aux utilisateurs de réécouter les régles du jeu.
+
+classement => "Classement"
+
+Permet aux utilisateurs de savoir le classement quand ils le souhaitent.
