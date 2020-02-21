@@ -3,6 +3,9 @@
 Lien swagger
 http://34.238.113.165/swagger-ui.html
 
+Lien Github
+https://github.com/sbanhch/Projet-Alexa-Action-Verite
+
 #A lire pour tester la skill "Action ou Vérité"
 
 Pour installer l'application en beta test, commencer tout d'abord par cliquer sur le (premier) lien reçu par mail afin de valider
