@@ -5,9 +5,9 @@ votre accès à la béta-test. Vous devez avoir un compte amazon classique pour 
 
 Apres avoir cliquer sur le lien, vous serez redirigé sur une page "Amazon Alexa".
 Connectez vous et allez ensuite dans l'onglet "Skills" disponible sur la gauche de la page.
-Cliquez ensuite sur "Vos Skills" disponible en haut à gauche.
+Cliquez ensuite sur "Vos Skills" disponible en haut à droite.
 Cliquez ensuite sur "Skills développées" et vous devriez avoir accès à la skill "Action ou Vérité".
-	=> Si ce n'est pas le cas ou que vos n'avez pas d'onglet "Skills développées",
+	=> Si ce n'est pas le cas ou que vous n'avez pas d'onglet "Skills développées",
 		fermez la page et recliquez sur le lien du mail, vous devriez y avoir accès
 Cliquez ensuite sur la skill "Action ou Vérité" puis activez là si elle ne l'est pas déjà.
 
